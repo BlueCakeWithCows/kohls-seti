@@ -166,13 +166,21 @@ class DopplerSystemEME:
         emitters_moon_altitudes = self._last_moon_emitters_altitudes
         for idx, emitter in enumerate(self.emitters):
             fig, (ax, ax2) = plt.subplots(2)
-            title = '(%f, %f) to (%f, %f)'%(emitter.lat.value, emitter.lon.value, reciever.lat.value, reciever.lon.value)
+            titlel = '(%f, %f) to (%f, %f)'%(emitter.lat.value, emitter.lon.value, reciever.lat.value, reciever.lon.value)
+            if self.signal:
+                title = titlel + '\n{:3e} Hz'.format(self.signal)
             ax.set_title(title, pad = '20')
             ax.set_xlim(0,x[-1])
             ax2.set_xlabel('Hours Since %s'%start_string)
             ax.set_ylim(1 - 4 * 1e-6, 1 + 4* 1e-6)
-            ax.plot(x, self._last_dopplers[idx], label = 'Doppler Factor')
-            ax.set_ylabel('Doppler Factor')
+            if self.signal:
+                        
+                        tmp = self.signal/ (10e6/40)
+                        ax.set_ylim(-tmp, tmp)
+                        
+            label = 'Doppler Shift (Hz)' if self.signal else 'Doppler Factor'
+            ax.plot(x, self._last_dopplers[idx], label = label)
+            ax.set_ylabel(label)
             #ax2= fig.gca()
             ax2.plot(x, reciever_moon_altitudes, color ='g', label = 'Moon Alt, Reciever')
             ax2.plot(x, emitters_moon_altitudes[idx], color ='r', label = 'Moon Alt, Emitter')
@@ -180,7 +188,7 @@ class DopplerSystemEME:
             ax2.set_xlim(0, x[-1])
             ax2.set_ylim(0,90)
             lgd = fig.legend(bbox_to_anchor=(.95,.8), loc="upper left", borderpad= 1.2)
-            fig.savefig(path + title+'.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
+            fig.savefig(path + titlel+'.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
             plt.close(fig)
             
     def get_plot(self, idx):
