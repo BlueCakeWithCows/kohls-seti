@@ -10,14 +10,19 @@ Consider the a signal being emitted from the earth to the moon. Let the position
 To get the final doppler shift we simply take the newly shifted signal and apply the reverse process, using a location on Earth as the reciever and the moon as an emitter. Notice, if we use the same location on earth twice then its as if we applied the first doppler factor twice. 
 
 In order to get an idea of scale, lets examine the largest expected doppler shift, assuming the moon's own motion is neglible with respect to the Earth's rotation. At the equator this is approximately 460 m/s. We can see the doppler shift is on the order of ten-thousand times less than the signal frequency. For readability, most of the following graphs will use a signal frequency of 10 MHz. 
+
 ![](./images/worst_case_estimate.png)
+
+## Model Assumptions
+We assume reflection from the surface of the moon is specular. The justification being twofold. First, the surface of the moon should appear smooth at frequencies below 10 GHz (citation needed). The surface of the moon, being roughly sphere of radius 300km, i
 
 ## Example Graph
 An example output graph is shown below.
 
 ![](images/ex_1.png)
 
-The top graph displays the amount of Doppler shift at a given time. The below graph displays the altitude of the moon from the view of the reciever and emitter respectively. Notice doppler shift is only given when both altitudes are above zero. To disable this filtering use:
+The top graph displays the amount of Doppler shift at a given time. The below graph displays the altitude of the moon from the view of the reciever and emitter respectively. The emitter and reciever locations are given as (lat, lon) pairs. 
+Notice doppler shift is only given when both altitudes are above zero. To disable this filtering use:
 ```python
 DopplerSystemEME(..., only_visible = False)
 ```
