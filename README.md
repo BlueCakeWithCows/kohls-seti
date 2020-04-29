@@ -12,5 +12,35 @@ To get the final doppler shift we simply take the newly shifted signal and apply
 In order to get an idea of scale, lets examine the largest expected doppler shift, assuming the moon's own motion is neglible with respect to the Earth's rotation. 
 We can use this fact to calculate a worst case bounds on expected doppler shift as a function of frequency. At the equator this is approximately 460 m/s. (Graph Here)
 
+## Usage
+Example of calculating doppler factors for 100 element grid of emitters across Earth. 
+``` python
+from (name here) import DopplerSystemEME, getEarthGrid
+iers.conf.iers_auto_url = 'ftp://cddis.gsfc.nasa.gov/pub/products/iers/finals2000A.all'
+solar_system_ephemeris.set('jpl') 
+
+start_string = '2020-01-01T00:00:00.00Z'
+timestep = units.Quantity('15 min')
+timespan = units.Quantity('4 hour')
+emitters, grid = getEarthGrid(10)
+reciever = EarthLocation.from_geodetic(lat = "38°25'53.6", lon ="-79°49'08.9", height=0)
+
+start_time = Time(start_string, format='isot', scale='utc')
+doppler_system = DopplerSystemEME(emitters, reciever, start_time, timestep, timespan, only_visible = True)
+doppler_system.update()
+```
+To plot all the emitters at once use 
+```python
+  doppler_system.save_plots('mycooldirectory/')
+```
+
+To retrieve the data or a single plot 
+```python
+  doppler_system.get_dopplers() #Returns list of np arrays of doppler factors
+  doppler_system.get_moon_altitudes_reciever() #Returns np array of moon altitude
+  doppler_system.get_moon_altitude_emitters() #Reurns list of np arrays of moon altitude
+  doppler_system.get_plot(idx) #Plots, but does not save, a single figure. 
+```
+
 ## Tools and Dependencies
 NumPy, Astropy, jplephem, matplotlib
