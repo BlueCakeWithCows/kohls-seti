@@ -14,7 +14,7 @@ In order to get an idea of scale, lets examine the largest expected doppler shif
 ![](./images/worst_case_estimate.png)
 
 ## Model Assumptions
-We assume reflection from the surface of the moon is specular. The justification being twofold. First, the surface of the moon should appear smooth at frequencies below 10 GHz (citation needed). The surface of the moon, being roughly sphere of radius 300km, i
+We assume reflection from the surface of the moon is specular. The justification being twofold. First, the surface of the moon should appear smooth at frequencies below 10 GHz (citation needed). The surface of the moon, being roughly sphere of radius 1700km when hit by a wave of frequency 1 MHz has a time delay on the order of 100 picoseconds between the center and edge of wave. Thus its safe to safe the moon is essentially flat with regards to the reflection.  
 
 ## Example Graph
 An example output graph is shown below.
