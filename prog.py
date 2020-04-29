@@ -36,7 +36,7 @@ class DopplerSystemEME:
         
     """
     
-    def __init__(self, emitters, reciever, start_time, timestep, timespan, doppler = relativistic_doppler, only_visible = True):
+    def __init__(self, emitters, reciever, start_time, timestep, timespan, doppler = relativistic_doppler, only_visible = True, signal = None):
         self.emitters = emitters
         self.reciever = reciever
         self.only_visible = only_visible
@@ -51,6 +51,7 @@ class DopplerSystemEME:
         self._last_dopplers = None
         self._last_moon_emitters_altitudes = None
         self._last_moon_reciever_altitudes = None
+        self.signal = signal
         
     def update(self):
         self.get_dopplers()
@@ -109,12 +110,16 @@ class DopplerSystemEME:
             delta_v_e_m_norm= delta_v_e_m.norm().value
             if self.only_visible:
                 moon_altaz_2 = moon.transform_to(AltAz(obstime=time, location = emitter))
-                shifts[i, :] = shifts[i, :] * self.doppler(delta_v_e_m_norm, theta_e_m) * np.greater(moon_altaz_2.alt, 0, dtype=np.float64)
+                shifts[i] = shifts[i] * self.doppler(delta_v_e_m_norm, theta_e_m) * np.greater(moon_altaz_2.alt, 0, dtype=np.float64)
             else: 
-                shifts[i, :] = self.doppler(delta_v_e_m_norm, theta_e_m)
+                shifts[i] = self.doppler(delta_v_e_m_norm, theta_e_m)
        
         shifts = shifts * shifted_m_e
         shifts[shifts==0] = np.nan
+        
+        if self.signal:
+            shifts[:]  = shifts[:]*self.signal-self.signal
+        
         return shifts
     
     def get_dopplers(self):
@@ -187,12 +192,20 @@ class DopplerSystemEME:
         emitter = self.emitters[idx]
         fig, (ax, ax2) = plt.subplots(2)
         title = '(%f, %f) to (%f, %f)'%(emitter.lat.value, emitter.lon.value, reciever.lat.value, reciever.lon.value)
+        if self.signal:
+            title += '\n{:3e} Hz'.format(self.signal)
         ax.set_title(title, pad = '20')
         ax.set_xlim(0,x[-1])
         ax2.set_xlabel('Hours Since %s'%start_string)
         ax.set_ylim(1 - 4 * 1e-6, 1 + 4* 1e-6)
-        ax.plot(x, self._last_dopplers[idx], label = 'Doppler Factor')
-        ax.set_ylabel('Doppler Factor')
+        if self.signal:
+                    
+                    tmp = self.signal/ (10e6/40)
+                    ax.set_ylim(-tmp, tmp)
+                    
+        label = 'Doppler Shift (Hz)' if self.signal else 'Doppler Factor'
+        ax.plot(x, self._last_dopplers[idx], label = label)
+        ax.set_ylabel(label)
         #ax2= fig.gca()
         ax2.plot(x, reciever_moon_altitudes, color ='g', label = 'Moon Alt, Reciever')
         ax2.plot(x, emitters_moon_altitudes[idx], color ='r', label = 'Moon Alt, Emitter')
