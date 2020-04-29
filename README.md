@@ -12,6 +12,17 @@ To get the final doppler shift we simply take the newly shifted signal and apply
 In order to get an idea of scale, lets examine the largest expected doppler shift, assuming the moon's own motion is neglible with respect to the Earth's rotation. At the equator this is approximately 460 m/s. We can see the doppler shift is on the order of ten-thousand times less than the signal frequency. For readability, most of the following graphs will use a signal frequency of 10 MHz. 
 ![](./images/worst_case_estimate.png)
 
+## Example Graph
+An example output graph is shown below.
+
+![](images/ex_1.png)
+
+The top graph displays the amount of Doppler shift at a given time. The below graph displays the altitude of the moon from the view of the reciever and emitter respectively. Notice doppler shift is only given when both altitudes are above zero. To disable this filtering use:
+```python
+DopplerSystemEME(..., only_visible = False)
+```
+
+
 ## Usage
 Example of calculating doppler factors for two emitters.
 ``` python
