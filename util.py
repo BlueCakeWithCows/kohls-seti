@@ -13,20 +13,19 @@ def get_earth_grid(n):
     return grid
 
 
-def nearest(trial_sols, observation):
-    def center(array):
-        tmp = sum(~np.isnan(array))
-        if tmp:
-            average = np.nansum(array) / sum(~np.isnan(array))
-            return array-average
-        return array
+def _center(array):
+    tmp = sum(~np.isnan(array))
+    if tmp:
+        average = np.nansum(array) / sum(~np.isnan(array))
+        return array-average
+    return array
 
-    obs = center(observation)
-    n = 20
+def _calc_errors(trial_sols, observation):
+    obs = _center(observation)
     errors = [0] * len(trial_sols)
 
-    for i in range(0, n ** 2):
-        result = center(trial_sols[i]) - obs
+    for i in range(0, len(trial_sols)):
+        result = _center(trial_sols[i]) - obs
         tmp = sum(~np.isnan(result))
         if tmp:
             result = (result ** 2) / tmp
@@ -35,6 +34,23 @@ def nearest(trial_sols, observation):
         if not_matched >= 2:
             err = np.inf
         errors[i] = err
+    return errors
+
+#Incorrect handling latitudes near extremes
+def local_minimize(grid, trial_sols, observation):
+    errors = _calc_errors(trial_sols, observation)
+    new_errors = [0] * len(trial_sols)
+    for i in range(0, len(trial_sols)):
+        adj = grid.getAdjacent(i)
+        is_local_min = all(errors[i] <= errors[x] for x in adj)
+        new_errors[i] = errors[i] if is_local_min else np.inf
+    indices = np.argsort(errors)
+    return indices
+
+
+
+def minimize(trial_sols, observation):
+    errors = _calc_errors(trial_sols, observation)
     indices = np.argsort(errors)
     return indices
 
@@ -61,5 +77,8 @@ class Grid:
         else:
             self.lst[x] = val
 
-    def getAdjacent(self, x, y):
+    def getAdjacent(self, x, y = None):
+        if y is None:
+            y = x%self.n
+            x = x//self.n
         return [self.getIndex(v_x, v_y) for v_x, v_y in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]]

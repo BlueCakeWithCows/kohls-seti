@@ -2,7 +2,7 @@
 #
 #
 import os
-import pickle, dill
+import pickle
 from math import ceil
 
 import matplotlib.pyplot as plt
@@ -174,6 +174,7 @@ class DopplerSystemEME:
             fig, (ax, ax2) = plt.subplots(2)
             titlel = '(%f, %f) to (%f, %f)' % (
                 emitter.lat.value, emitter.lon.value, receiver.lat.value, receiver.lon.value)
+            title = titlel
             if self.signal:
                 title = titlel + '\n{:3e} Hz'.format(self.signal)
             ax.set_title(title, pad='20')
