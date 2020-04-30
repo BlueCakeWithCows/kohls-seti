@@ -2,6 +2,7 @@
 #
 #
 import os
+import pickle, dill
 from math import ceil
 
 import matplotlib.pyplot as plt
@@ -159,6 +160,9 @@ class DopplerSystemEME:
             self._last_moon_emitters_altitudes = altitudes
         return self._last_moon_emitters_altitudes
 
+    def save(self, path):
+        save(self, path)
+
     def save_plots(self, path):
         os.makedirs(path, exist_ok=True)
         receiver = self.receiver
@@ -169,7 +173,7 @@ class DopplerSystemEME:
         for idx, emitter in enumerate(self.emitters):
             fig, (ax, ax2) = plt.subplots(2)
             titlel = '(%f, %f) to (%f, %f)' % (
-            emitter.lat.value, emitter.lon.value, receiver.lat.value, receiver.lon.value)
+                emitter.lat.value, emitter.lon.value, receiver.lat.value, receiver.lon.value)
             if self.signal:
                 title = titlel + '\n{:3e} Hz'.format(self.signal)
             ax.set_title(title, pad='20')
@@ -222,3 +226,12 @@ class DopplerSystemEME:
         ax2.set_xlim(0, x[-1])
         ax2.set_ylim(0, 90)
         lgd = fig.legend(bbox_to_anchor=(.95, .8), loc="upper left", borderpad=1.2)
+
+
+def save(obj, path):
+    with open(path, 'wb') as pickle_file:
+        pickle.dump(obj, pickle_file)
+
+
+def load(filename):
+    return pickle.load(filename)
