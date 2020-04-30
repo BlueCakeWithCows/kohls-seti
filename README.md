@@ -91,7 +91,7 @@ The get_earth_grid(n) returns n^2 evenly spaced (in terms of lat and lon) locati
 
 Observed signal originatting from (33, -88) (lat, lon). Note, there is no noise is this signal and results may vary with real data.
 
-![][./images/finder_obs.png]
+![](./images/finder_obs.png)
 
 Best three results
 
