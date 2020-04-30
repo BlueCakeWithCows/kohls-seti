@@ -95,9 +95,9 @@ Observed signal originatting from (33, -88) (lat, lon). Note, there is no noise 
 
 Best three results
 
-![][./images/finder_1.png]
-![][./images/finder_2.png]
-![][./images/finder_3.png]
+![](./images/finder_1.png)
+![](./images/finder_2.png)
+![](./images/finder_3.png)
 
 
 ## Tools and Dependencies
