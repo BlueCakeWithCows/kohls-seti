@@ -34,6 +34,10 @@ Notice doppler shift is only given when both altitudes are above zero. To disabl
     DopplerSystemEME(..., only_visible = False)
 ```
 
+The below plot is of a receiver near the south pole and an emitter a bit farther north. Filtering is disabled and signal is set to None. 
+
+![](images/ex_2.png)
+
 
 ## Basic Usage
 Example of calculating doppler factors for two emitters.
