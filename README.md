@@ -5,11 +5,14 @@ Mason Kohls, Berkeley SETI Research Center, Spring 2020
 ## Introduction
 One method for determining Earth's technosignature is to examine the radio waves reflected by the moon back towards the Earth. Radio signals emitted from the Earth and reflected off the Moon are subject to two doppler shifts: when the Moon 'bounces' the signal and when it is recieved on Earth. In this project I generate predictions for the doppler factor for arbitrary emitter and reciever locations on Earth.
 ## Background
-The doppler shift as described in the reciever frame is . 
-Consider the a signal being emitted from the earth to the moon. Let the position and velocity of the emitter be described by A and A' respectively. Let the position and velocity of the moon be described by B and B' respectively. Then, in the moon frame (reciever frame) for the emitter we have position p = A - B,  velocity v = A' - B'. The moon's position and velocity being 0. Now cos(θ) = p.v/(|p||v|). Thus we can calculate the doppler shift. 
-To get the final doppler shift we simply take the newly shifted signal and apply the reverse process, using a location on Earth as the reciever and the moon as an emitter. Notice, if we use the same location on earth twice then its as if we applied the first doppler factor twice. 
+The doppler shift as described in the receiver frame is:
+ 
+ ![](./images/doppler_eq.svg) 
 
-In order to get an idea of scale, lets examine the largest expected doppler shift, assuming the moon's own motion is neglible with respect to the Earth's rotation. At the equator this is approximately 460 m/s. We can see the doppler shift is on the order of ten-thousand times less than the signal frequency. For readability, most of the following graphs will use a signal frequency of 10 MHz. 
+Consider the a signal being emitted from the earth to the moon. Let the position and velocity of the emitter be described by A and A' respectively. Let the position and velocity of the moon be described by B and B' respectively. Then, in the moon frame (receiver frame) for the emitter we have position p = A - B,  velocity v = A' - B'. The moon's position and velocity being 0. Now cos(θ) = p.v/(|p||v|). Thus we can calculate the doppler shift. 
+To get the final doppler shift we simply take the newly shifted signal and apply the reverse process, using a location on Earth as the receiver and the moon as an emitter. Notice, if we use the same location on earth twice then its as if we applied the first doppler factor twice. 
+
+In order to get an idea of scale, lets examine the largest expected doppler shift, assuming the moon's own motion is negligible with respect to the Earth's rotation. At the equator this is approximately 460 m/s. We can see the doppler shift is on the order of ten-thousand times less than the signal frequency. For readability, most of the following graphs will use a signal frequency of 10 MHz. 
 
 ![](./images/worst_case_estimate.png)
 
@@ -18,7 +21,7 @@ We assume reflection from the surface of the moon is specular. The justification
 
 We assume atmospheric effects on the signal are negligible.
 
-Solar system epheremis from JPL. For the doppler calculation we use the relativistic doppler shift equation. We ignore gravitational effects. 
+Solar system ephemeris from JPL. For the doppler calculation we use the relativistic doppler shift equation. We ignore gravitational effects. 
 
 ## Example Graph
 An example output graph is shown below.
@@ -28,7 +31,7 @@ An example output graph is shown below.
 The top graph displays the amount of Doppler shift at a given time. The below graph displays the altitude of the moon from the view of the reciever and emitter respectively. The emitter and reciever locations are given as (lat, lon) pairs. 
 Notice doppler shift is only given when both altitudes are above zero. To disable this filtering use:
 ```python
-DopplerSystemEME(..., only_visible = False)
+    DopplerSystemEME(..., only_visible = False)
 ```
 
 
@@ -87,13 +90,13 @@ There are some utilities for finding an emitter location given a signal. This re
   for idx in min_idxs[0:3]:
     print(emitters[idx].lat, emitters[idx].lon)
 ```
-The get_earth_grid(n) returns n^2 evenly spaced (in terms of lat and lon) locations around the Earth. Then, to get 1 degree precision n would need to equal 360 (for lon coordinate). Runtimes may be very long for larger values of n, however resolution greatly suffers at low values of n. Omittting the call to doppler_system.update() will improve performance, however will disable graphing. Sample results for n=20 below.
+The function get_earth_grid(n) returns n^2 evenly spaced (in terms of lat and lon) locations around the Earth. An n=360 would be required to achieve 1 degree precision. Run time may be very long for larger values of n, however resolution greatly suffers at low values of n. Omitting the call to doppler_system.update() will improve performance at the expense of graphing. Sample results for n=20 below.
 
-Observed signal originatting from (33, -88) (lat, lon). Note, there is no noise is this signal and results may vary with real data.
+Observed signal originating from (33, -88) (lat, lon). Note, there is no noise is this signal and results may vary with real data.
 
 ![](./images/finder_obs.png)
 
-Best three results
+Best three results plotted:
 
 ![](./images/finder_1.png)
 ![](./images/finder_2.png)
