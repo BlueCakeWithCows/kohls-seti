@@ -2,6 +2,11 @@
 # Earth-Moon-Earth Doppler Factor Predictions
 Mason Kohls, Berkeley SETI Research Center, Spring 2020
 
+## Editted (May 2022)
+moon_doppler.ipynb contains code for generating plots of doppler shifts. In order to generate your own doppler graphs see the Sanity test in the same file or look at the other examples below it. 
+
+The other parts of this package are not guaranteed to work. In paticular, the ability to locate an emitter based on its signature is not complete. 
+
 ## Introduction
 One method for determining Earth's technosignature is to examine the radio waves reflected by the moon back towards the Earth. Radio signals emitted from the Earth and reflected off the Moon are subject to two doppler shifts: when the Moon 'bounces' the signal and when it is recieved on Earth. In this project I generate predictions for the doppler factor for arbitrary emitter and reciever locations on Earth.
 ## Background
